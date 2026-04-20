@@ -27,12 +27,12 @@ export const PLANTS = [
   { name: 'Saltmarsh Dodder',     type: 'native',   emoji: '🍝',  note: 'A native parasitic vine that looks like orange spaghetti — actually good for the ecosystem!' },
   { name: 'California Poppy',     type: 'native',   emoji: '🌼',  note: 'The state flower; essential for upland transition zones.' },
   { name: 'Marsh Rosemary',       type: 'native',   emoji: '💜',  note: 'Beautiful purple flowers that support native bees and butterflies.' },
-  { name: 'Gumplant',             type: 'native',   emoji: '🌻',  note: 'Sticky yellow flowers that provide high-tide refuge for marsh birds.' },
+  { name: 'Marsh Gumplant',             type: 'native',   emoji: '🌻',  note: 'Sticky yellow flowers that provide high-tide refuge for marsh birds.' },
   { name: 'California Sagebrush', type: 'native',   emoji: '🌿',  note: "'Cowboy Cologne'; vital for upland nesting birds." },
   { name: 'Saltgrass',            type: 'native',   emoji: '🌾',  note: 'A tough, salt-excreting grass that stabilizes the shoreline.' },
   { name: 'Coyote Brush',         type: 'native',   emoji: '🪴',  note: 'The backbone of coastal scrub restoration; very hardy.' },
   { name: 'Alkali Heath',         type: 'native',   emoji: '🌱',  note: 'Forms dense mats that help prevent erosion in the high marsh.' },
-  { name: 'Seepweed',             type: 'native',   emoji: '🌵',  note: 'A fleshy plant that thrives in the salty, alkaline soils of the South Bay.' },
+  { name: 'Common Yarrow',             type: 'native',   emoji: '🌵',  note: 'A fleshy plant that thrives in the salty, alkaline soils of the South Bay.' },
 
   // ----- INVASIVES (swipe LEFT to PULL) -----
   { name: 'Perennial Pepperweed', type: 'invasive', emoji: '⚪',  note: "Known as 'Tall Whitetop'; creates dense monocultures birds can't use." },

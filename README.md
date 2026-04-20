@@ -84,4 +84,3 @@ The workflow injects `BASE_PATH=/<repo-name>/` automatically so asset paths work
 ## 🐦 About SFBBO
 
 Plant identification is a real skill used by [San Francisco Bay Bird Observatory](https://www.sfbbo.org/) volunteers restoring South Bay marshes. Tap the logo in the app — or visit [sfbbo.org](https://www.sfbbo.org/) — to learn how to support the work.
-
