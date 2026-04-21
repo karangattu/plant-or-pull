@@ -218,12 +218,45 @@ export default function App() {
   const [state, setState] = useState(() => initialState(buildDeck(8)))
   const [fx, setFx] = useState(null)
   const [picturePlant, setPicturePlant] = useState(null)
+  const [installPrompt, setInstallPrompt] = useState(null)
+  const [installDismissed, setInstallDismissed] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return localStorage.getItem('pop_install_dismissed') === '1'
+  })
+  const [isInstalled, setIsInstalled] = useState(() => {
+    if (typeof window === 'undefined') return false
+    return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
+  })
   const [highScore, setHighScore] = useState(() => {
     if (typeof window === 'undefined') return 0
     return Number(localStorage.getItem('pop_high') || 0)
   })
 
   const tickRef = useRef(null)
+
+  useEffect(() => {
+    function handleBeforeInstallPrompt(event) {
+      event.preventDefault()
+      setInstallPrompt(event)
+    }
+
+    function handleAppInstalled() {
+      setInstallPrompt(null)
+      setIsInstalled(true)
+      setInstallDismissed(false)
+      try { localStorage.removeItem('pop_install_dismissed') } catch {}
+    }
+
+    if (typeof window === 'undefined') return undefined
+
+    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+    window.addEventListener('appinstalled', handleAppInstalled)
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+      window.removeEventListener('appinstalled', handleAppInstalled)
+    }
+  }, [])
 
   // Timer
   useEffect(() => {
@@ -287,6 +320,19 @@ export default function App() {
   function closePicture() {
     setPicturePlant(null)
   }
+
+  async function promptInstall() {
+    if (!installPrompt) return
+    installPrompt.prompt()
+    const choice = await installPrompt.userChoice.catch(() => null)
+    setInstallPrompt(null)
+    if (choice?.outcome !== 'accepted') {
+      setInstallDismissed(true)
+      try { localStorage.setItem('pop_install_dismissed', '1') } catch {}
+    }
+  }
+
+  const shouldShowInstallPrompt = !isInstalled && !installDismissed && !!installPrompt
 
   return (
     <div className="app">
@@ -411,6 +457,26 @@ export default function App() {
               Save the South Bay marsh! Swipe <b>right to plant</b> a native, <b>left to pull</b> an
               invasive. You have <b>{ROUND_SECONDS} seconds</b>.
             </p>
+            {shouldShowInstallPrompt && (
+              <div className="install-banner" role="status" aria-live="polite">
+                <div>
+                  <div className="install-title">Install the app</div>
+                  <div className="install-copy">Add Plant or Pull to your tablet for faster access and a full-screen feel.</div>
+                </div>
+                <div className="install-actions">
+                  <button className="install-btn primary" onClick={promptInstall}>Install</button>
+                  <button
+                    className="install-btn secondary"
+                    onClick={() => {
+                      setInstallDismissed(true)
+                      try { localStorage.setItem('pop_install_dismissed', '1') } catch {}
+                    }}
+                  >
+                    Not now
+                  </button>
+                </div>
+              </div>
+            )}
             <div className="legend">
               <span className="legend-item"><Sprout size={14} color="#86efac" /> Right = Native</span>
               <span className="legend-item"><Skull size={14} color="#fca5a5" /> Left = Invasive</span>
