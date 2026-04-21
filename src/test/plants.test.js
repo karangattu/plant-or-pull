@@ -72,4 +72,13 @@ describe('resolveImage', () => {
     expect(resolveImage('/plants/x.jpg')).toBe('/plants/x.jpg')
     expect(resolveImage('plants/x.jpg')).toBe('/plants/x.jpg')
   })
+
+  it('prefixes public asset paths for non-root base URLs', () => {
+    expect(resolveImage('/sfbbo_logo.png', '/plant-or-pull/')).toBe('/plant-or-pull/sfbbo_logo.png')
+    expect(resolveImage('plants/x.jpg', '/plant-or-pull/')).toBe('/plant-or-pull/plants/x.jpg')
+  })
+
+  it('does not double-prefix already resolved asset URLs', () => {
+    expect(resolveImage('/plant-or-pull/assets/x.png', '/plant-or-pull/')).toBe('/plant-or-pull/assets/x.png')
+  })
 })

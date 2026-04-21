@@ -67,10 +67,15 @@ export function buildDeck(rounds = 8, source = PLANTS, rand = Math.random) {
 }
 
 // Resolve an image path against Vite's BASE_URL so it works on GitHub Pages.
-export function resolveImage(image) {
+export function resolveImage(image, baseUrl) {
   if (!image) return null
-  if (/^https?:\/\//i.test(image)) return image
+  if (/^(?:https?:)?\/\//i.test(image) || /^[a-z]+:/i.test(image)) return image
   const env = (typeof import.meta !== 'undefined' && import.meta.env) || {}
-  const base = (env.BASE_URL || '/').replace(/\/$/, '')
-  return base + (image.startsWith('/') ? image : `/${image}`)
+  const base = (baseUrl ?? env.BASE_URL ?? '/').replace(/\/$/, '')
+  const normalized = image.startsWith('/') ? image : `/${image}`
+
+  if (!base || base === '/') return normalized
+  if (normalized === base || normalized.startsWith(`${base}/`)) return normalized
+
+  return `${base}${normalized}`
 }
