@@ -1,22 +1,23 @@
-const CACHE_NAME = 'plant-or-pull-v2'
-const APP_SHELL = [
-  self.registration.scope,
-]
+// Bump this whenever the deployed bundle changes shape so old clients refresh.
+const CACHE_NAME = 'plant-or-pull-v3'
 
 self.addEventListener('install', (event) => {
-  event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(APP_SHELL)).then(() => self.skipWaiting()),
-  )
+  event.waitUntil(self.skipWaiting())
 })
 
 self.addEventListener('activate', (event) => {
   event.waitUntil(
-    caches.keys().then((keys) =>
-      Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))),
-    ).then(() => self.clients.claim()),
+    caches
+      .keys()
+      .then((keys) =>
+        Promise.all(keys.filter((key) => key !== CACHE_NAME).map((key) => caches.delete(key))),
+      )
+      .then(() => self.clients.claim()),
   )
 })
 
+// Network-first with cache fallback so deploys are picked up immediately
+// while still allowing the game to be played offline once cached.
 self.addEventListener('fetch', (event) => {
   if (event.request.method !== 'GET') return
 
@@ -24,16 +25,21 @@ self.addEventListener('fetch', (event) => {
   if (requestUrl.origin !== self.location.origin) return
 
   event.respondWith(
-    caches.match(event.request).then((cachedResponse) => {
-      if (cachedResponse) return cachedResponse
-
-      return fetch(event.request)
-        .then((networkResponse) => {
+    fetch(event.request)
+      .then((networkResponse) => {
+        if (networkResponse && networkResponse.ok && networkResponse.type !== 'opaque') {
           const responseClone = networkResponse.clone()
-          caches.open(CACHE_NAME).then((cache) => cache.put(event.request, responseClone))
-          return networkResponse
-        })
-        .catch(() => caches.match(self.registration.scope))
-    }),
+          caches
+            .open(CACHE_NAME)
+            .then((cache) => cache.put(event.request, responseClone))
+            .catch(() => {})
+        }
+        return networkResponse
+      })
+      .catch(() =>
+        caches
+          .match(event.request)
+          .then((cached) => cached || caches.match(self.registration.scope)),
+      ),
   )
 })
