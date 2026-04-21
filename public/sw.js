@@ -1,5 +1,5 @@
 // Bump this whenever the deployed bundle changes shape so old clients refresh.
-const CACHE_NAME = 'plant-or-pull-v3'
+const CACHE_NAME = 'plant-or-pull-v4'
 
 self.addEventListener('install', (event) => {
   event.waitUntil(self.skipWaiting())

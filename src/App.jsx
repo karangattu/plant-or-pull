@@ -52,12 +52,66 @@ function PlantArt({ plant }) {
   return <Leaf size={64} color="#86efac" aria-hidden />
 }
 
+function PicturePreview({ plant, onClose }) {
+  const src = resolveImage(plant.image)
+
+  useEffect(() => {
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') onClose()
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [onClose])
+
+  return (
+    <motion.div
+      className="picture-modal"
+      role="dialog"
+      aria-modal="true"
+      aria-label={`${plant.name} picture preview`}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onClick={onClose}
+    >
+      <motion.div
+        className="picture-modal-card"
+        initial={{ scale: 0.96, y: 14 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.96, y: 14 }}
+        onClick={(event) => event.stopPropagation()}
+      >
+        <div className="picture-modal-header">
+          <div>
+            <div className="picture-modal-kicker">Closer look</div>
+            <div className="picture-modal-title">{plant.name}</div>
+          </div>
+          <button type="button" className="picture-modal-close" onClick={onClose} aria-label="Close picture">
+            ×
+          </button>
+        </div>
+        <div className="picture-modal-body">
+          {src ? (
+            <img className="picture-modal-img" src={src} alt={plant.name} />
+          ) : (
+            <div className="picture-modal-fallback">
+              <Leaf size={72} color="#86efac" aria-hidden />
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 // ---------- Card ----------
-function Card({ plant, onSwipe, isTop }) {
+function Card({ plant, onSwipe, isTop, onShowPicture }) {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-220, 0, 220], [-18, 0, 18])
   const leftOpacity = useTransform(x, [-160, -40, 0], [1, 0.2, 0])
   const rightOpacity = useTransform(x, [0, 40, 160], [0, 0.2, 1])
+  const [showHint, setShowHint] = useState(false)
 
   function handleDragEnd(_, info) {
     if (info.offset.x < -SWIPE_THRESHOLD || info.velocity.x < -700) {
@@ -100,7 +154,38 @@ function Card({ plant, onSwipe, isTop }) {
           {plant.name}
           <Leaf size={18} color="#16a34a" />
         </h2>
-        <p className="card-hint">{plant.note}</p>
+        <button
+          type="button"
+          className="hint-toggle"
+          onClick={(event) => {
+            event.stopPropagation()
+            setShowHint((value) => !value)
+          }}
+          onPointerDown={(event) => event.stopPropagation()}
+          aria-expanded={showHint}
+          aria-controls={`hint-${plant.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
+        >
+          {showHint ? 'Hide hint' : 'Show hint'}
+        </button>
+        <button
+          type="button"
+          className="hint-toggle picture-toggle"
+          onClick={(event) => {
+            event.stopPropagation()
+            onShowPicture?.(plant)
+          }}
+          onPointerDown={(event) => event.stopPropagation()}
+        >
+          Show picture
+        </button>
+        {showHint && (
+          <p
+            id={`hint-${plant.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
+            className="card-hint"
+          >
+            {plant.note}
+          </p>
+        )}
       </div>
     </motion.div>
   )
@@ -132,6 +217,7 @@ export default function App() {
   const [screen, setScreen] = useState('home') // home | play | over
   const [state, setState] = useState(() => initialState(buildDeck(8)))
   const [fx, setFx] = useState(null)
+  const [picturePlant, setPicturePlant] = useState(null)
   const [highScore, setHighScore] = useState(() => {
     if (typeof window === 'undefined') return 0
     return Number(localStorage.getItem('pop_high') || 0)
@@ -194,6 +280,14 @@ export default function App() {
   const next = state.deck[state.index + 1]
   const accuracy = useMemo(() => accuracyOf(state), [state])
 
+  function showPicture(plant) {
+    setPicturePlant(plant)
+  }
+
+  function closePicture() {
+    setPicturePlant(null)
+  }
+
   return (
     <div className="app">
       {/* HUD */}
@@ -243,11 +337,23 @@ export default function App() {
           </AnimatePresence>
 
           {next && screen === 'play' && (
-            <Card key={`next-${state.index + 1}`} plant={next} isTop={false} onSwipe={() => {}} />
+            <Card
+              key={`next-${state.index + 1}`}
+              plant={next}
+              isTop={false}
+              onSwipe={() => {}}
+              onShowPicture={showPicture}
+            />
           )}
           <AnimatePresence>
             {current && screen === 'play' && (
-              <Card key={`top-${state.index}`} plant={current} isTop onSwipe={handleSwipe} />
+              <Card
+                key={`top-${state.index}`}
+                plant={current}
+                isTop
+                onSwipe={handleSwipe}
+                onShowPicture={showPicture}
+              />
             )}
           </AnimatePresence>
         </div>
@@ -353,6 +459,12 @@ export default function App() {
               Support SFBBO's work <ExternalLink size={14} />
             </a>
           </motion.div>
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {picturePlant && (
+          <PicturePreview plant={picturePlant} onClose={closePicture} />
         )}
       </AnimatePresence>
     </div>

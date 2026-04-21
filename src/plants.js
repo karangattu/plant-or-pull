@@ -25,7 +25,7 @@ const assetImg = (file) => _assets[`../assets/${file}`] ?? null
 
 export const PLANTS = [
   // ----- NATIVES (swipe RIGHT to PLANT) -----
-  { name: 'Pickleweed',           type: 'native',   image: assetImg('PICKLEWEED.png'),           note: "pickleweed is a \"halophyte\" (a plant that thrives in salty conditions), it forms dense, succulent mats that stay green even when other vegetation dies back." },
+  { name: 'Pickleweed',           type: 'native',   image: assetImg('PICKLEWEED.png'),           note: "Pickleweed is a \"halophyte\" (a plant that thrives in salty conditions), it forms dense, succulent mats that stay green even when other vegetation dies back." },
   { name: 'California Poppy',     type: 'native',   image: assetImg('CALIFORNIA_POPPY.png'),     note: 'The California poppy serves as a critical early-season food source for native pollinators, particularly bumblebees and solitary bees.' },
   { name: 'Western Marsh Rosemary', type: 'native', image: assetImg('MARSH_ROSEMARY.png'),       note: 'Western Marsh Rosemary provides a vital nectar source for butterflies and native bees when many other marsh plants have finished blooming from mid-summer through late fall.' },
   { name: 'Marsh Gumplant',       type: 'native',   image: assetImg('MARSH_GUMPLANT.png'),       note: 'Marsh Gumplant often grows along the banks of tidal sloughs. Its root system helps hold the "shoulders" of these channels together, slowing down erosion from the daily ebb and flow of the tides.' },

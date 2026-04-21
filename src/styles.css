@@ -211,11 +211,31 @@ body {
   justify-content: space-between;
   gap: 10px;
 }
+.hint-toggle {
+  margin: 0;
+  border: 0;
+  background: transparent;
+  color: #0f766e;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 800;
+  padding: 0;
+  cursor: pointer;
+}
+.hint-toggle:focus-visible {
+  outline: 2px solid #0f766e;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+.picture-toggle {
+  margin-top: 8px;
+  color: #155e75;
+}
 .card-hint {
+  margin-top: 8px;
   color: var(--muted);
   font-size: 13px;
   line-height: 1.35;
-  margin: 0;
 }
 
 /* swipe stamps */
@@ -339,6 +359,76 @@ body {
   text-shadow: 0 6px 30px rgba(245,200,75,0.35);
 }
 .muted { opacity: 0.75; font-size: 14px; }
+
+/* ---------- Picture modal ---------- */
+.picture-modal {
+  position: absolute;
+  inset: 0;
+  z-index: 8;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  background: rgba(5, 16, 12, 0.72);
+  backdrop-filter: blur(8px);
+}
+.picture-modal-card {
+  width: min(92vw, 420px);
+  border-radius: 28px;
+  background: #fff;
+  color: var(--ink);
+  box-shadow: 0 26px 80px -24px rgba(0, 0, 0, 0.65);
+  overflow: hidden;
+}
+.picture-modal-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 18px 18px 14px;
+}
+.picture-modal-kicker {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #0f766e;
+}
+.picture-modal-title {
+  margin-top: 4px;
+  font-size: 20px;
+  font-weight: 900;
+}
+.picture-modal-close {
+  width: 36px;
+  height: 36px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(15, 118, 110, 0.12);
+  color: #0f766e;
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+.picture-modal-body {
+  padding: 0 18px 18px;
+}
+.picture-modal-img,
+.picture-modal-fallback {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  border-radius: 22px;
+  object-fit: contain;
+  background:
+    radial-gradient(circle at 30% 20%, rgba(245,200,75,0.18), transparent 60%),
+    linear-gradient(160deg, #eaf7ef, #cfeadd);
+}
+.picture-modal-img {
+  display: block;
+}
+.picture-modal-fallback {
+  display: grid;
+  place-items: center;
+}
 
 /* ---------- Floating feedback (+1 / -1) ---------- */
 .float-fx {
