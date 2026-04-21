@@ -84,6 +84,26 @@ body {
   object-fit: contain;
   box-shadow: 0 18px 40px -12px rgba(0,0,0,0.5);
 }
+.splash-logo {
+  display: block;
+}
+.splash-logo img {
+  height: 72px;
+  width: auto;
+  border-radius: 16px;
+  background: #fff;
+  padding: 8px;
+  object-fit: contain;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.35);
+}
+.splash-hero {
+  width: 100%;
+  max-width: 340px;
+  border-radius: 20px;
+  object-fit: cover;
+  display: block;
+  box-shadow: 0 20px 48px -12px rgba(0,0,0,0.6);
+}
 .learn-more {
   display: inline-flex;
   align-items: center;

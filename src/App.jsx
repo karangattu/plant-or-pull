@@ -15,6 +15,7 @@ import {
   Vibrate,
   ExternalLink,
 } from 'lucide-react'
+import splashSrc from '../assets/GAME_SPLASH_SCREEN.png'
 import { buildDeck, resolveImage } from './plants'
 import {
   ROUND_SECONDS,
@@ -33,7 +34,7 @@ function vibrate(pattern) {
   }
 }
 
-// ---------- Plant artwork: image with emoji fallback ----------
+// ---------- Plant artwork: image with generic fallback ----------
 function PlantArt({ plant }) {
   const src = resolveImage(plant.image)
   const [failed, setFailed] = useState(false)
@@ -48,7 +49,7 @@ function PlantArt({ plant }) {
       />
     )
   }
-  return <span className="card-emoji" aria-hidden>{plant.emoji}</span>
+  return <Leaf size={64} color="#86efac" aria-hidden />
 }
 
 // ---------- Card ----------
@@ -296,10 +297,10 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
-            <a href={SFBBO_URL} target="_blank" rel="noopener noreferrer" className="logo-hero">
+            <a href={SFBBO_URL} target="_blank" rel="noopener noreferrer" className="splash-logo">
               <img src={LOGO_URL} alt="SFBBO" />
             </a>
-            <h1 className="title">Plant <span style={{ color: '#f5c84b' }}>or</span> Pull</h1>
+            <img src={splashSrc} alt="Plant or Pull" className="splash-hero" />
             <p className="subtitle">
               Save the South Bay marsh! Swipe <b>right to plant</b> a native, <b>left to pull</b> an
               invader. You have <b>{ROUND_SECONDS} seconds</b>.

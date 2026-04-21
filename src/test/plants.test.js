@@ -14,7 +14,6 @@ describe('PLANTS catalogue', () => {
       expect(typeof p.name).toBe('string')
       expect(p.name.length).toBeGreaterThan(0)
       expect(['native', 'invasive']).toContain(p.type)
-      expect(typeof p.emoji).toBe('string')
       expect(typeof p.note).toBe('string')
     }
   })
