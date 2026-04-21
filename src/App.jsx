@@ -409,7 +409,7 @@ export default function App() {
             <img src={splashSrc} alt="Plant or Pull" className="splash-hero" />
             <p className="subtitle">
               Save the South Bay marsh! Swipe <b>right to plant</b> a native, <b>left to pull</b> an
-              invader. You have <b>{ROUND_SECONDS} seconds</b>.
+              invasive. You have <b>{ROUND_SECONDS} seconds</b>.
             </p>
             <div className="legend">
               <span className="legend-item"><Sprout size={14} color="#86efac" /> Right = Native</span>
