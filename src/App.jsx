@@ -14,6 +14,9 @@ import {
   ArrowRight,
   Vibrate,
   ExternalLink,
+  Target,
+  CheckCircle2,
+  XCircle,
 } from 'lucide-react'
 import splashSrc from '../assets/GAME_SPLASH_SCREEN.png'
 import { buildDeck, resolveImage } from './plants'
@@ -212,51 +215,144 @@ function Brand({ compact = false }) {
   )
 }
 
+// ---------- Tutorial ----------
+const TUTORIAL_STEPS = [
+  {
+    icon: Sprout,
+    iconColor: '#86efac',
+    title: 'Plant the natives',
+    body: 'When you see a native marsh plant, swipe the card to the right (or tap the green Plant button). Natives like Pickleweed and Saltgrass keep the marsh healthy.',
+  },
+  {
+    icon: Trash2,
+    iconColor: '#fca5a5',
+    title: 'Pull the invasives',
+    body: 'Spot an invasive species like Pampas Grass or Fennel? Swipe left (or tap the red Pull button) to remove it before it takes over.',
+  },
+  {
+    icon: Leaf,
+    iconColor: '#0f766e',
+    title: 'Need a clue?',
+    body: 'Tap "Show hint" on any card for a quick fact, or "Show picture" to see a closer look at the plant.',
+  },
+  {
+    icon: Flame,
+    iconColor: '#f5c84b',
+    title: 'Build a streak',
+    body: 'Get cards right in a row to build a streak — every 3 in a row earns bonus points. The clock keeps ticking, so trust your eyes!',
+  },
+]
+
+function Tutorial({ onClose, onStart, autoStarted }) {
+  const [step, setStep] = useState(0)
+  const total = TUTORIAL_STEPS.length
+  const current = TUTORIAL_STEPS[step]
+  const Icon = current.icon
+  const isLast = step === total - 1
+
+  function next() {
+    if (isLast) {
+      if (autoStarted) onStart()
+      else onClose()
+    } else {
+      setStep((s) => s + 1)
+    }
+  }
+  function back() {
+    setStep((s) => Math.max(0, s - 1))
+  }
+
+  return (
+    <motion.div
+      className="tutorial-overlay"
+      role="dialog"
+      aria-modal="true"
+      aria-label="How to play tutorial"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+    >
+      <motion.div
+        className="tutorial-card"
+        initial={{ scale: 0.95, y: 16 }}
+        animate={{ scale: 1, y: 0 }}
+        exit={{ scale: 0.95, y: 16 }}
+      >
+        <div className="tutorial-progress" aria-hidden>
+          {TUTORIAL_STEPS.map((_, i) => (
+            <span key={i} className={i === step ? 'active' : i < step ? 'done' : ''} />
+          ))}
+        </div>
+
+        <button
+          type="button"
+          className="tutorial-skip"
+          onClick={() => (autoStarted ? onStart() : onClose())}
+          aria-label="Skip tutorial"
+        >
+          Skip
+        </button>
+
+        <div className="tutorial-icon" style={{ color: current.iconColor }}>
+          <Icon size={56} />
+        </div>
+        <div className="tutorial-step-num">Step {step + 1} of {total}</div>
+        <h2 className="tutorial-title">{current.title}</h2>
+        <p className="tutorial-body">{current.body}</p>
+
+        <div className="tutorial-actions">
+          <button
+            type="button"
+            className="tutorial-btn secondary"
+            onClick={back}
+            disabled={step === 0}
+          >
+            <ArrowLeft size={16} /> Back
+          </button>
+          <button
+            type="button"
+            className="tutorial-btn primary"
+            onClick={next}
+          >
+            {isLast ? (
+              autoStarted ? (
+                <><Play size={16} /> Start game</>
+              ) : (
+                <>Got it</>
+              )
+            ) : (
+              <>Next <ArrowRight size={16} /></>
+            )}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
+  )
+}
+
 // ---------- App ----------
 export default function App() {
   const [screen, setScreen] = useState('home') // home | play | over
   const [state, setState] = useState(() => initialState(buildDeck(8)))
   const [fx, setFx] = useState(null)
   const [picturePlant, setPicturePlant] = useState(null)
-  const [installPrompt, setInstallPrompt] = useState(null)
-  const [installDismissed, setInstallDismissed] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return localStorage.getItem('pop_install_dismissed') === '1'
-  })
-  const [isInstalled, setIsInstalled] = useState(() => {
-    if (typeof window === 'undefined') return false
-    return window.matchMedia?.('(display-mode: standalone)').matches || window.navigator.standalone === true
-  })
+  const [tutorial, setTutorial] = useState(null) // null | { autoStarted: boolean }
   const [highScore, setHighScore] = useState(() => {
     if (typeof window === 'undefined') return 0
     return Number(localStorage.getItem('pop_high') || 0)
   })
 
-  const tickRef = useRef(null)
-
+  // Auto-show the tutorial the first time someone opens the game.
   useEffect(() => {
-    function handleBeforeInstallPrompt(event) {
-      event.preventDefault()
-      setInstallPrompt(event)
-    }
-
-    function handleAppInstalled() {
-      setInstallPrompt(null)
-      setIsInstalled(true)
-      setInstallDismissed(false)
-      try { localStorage.removeItem('pop_install_dismissed') } catch {}
-    }
-
-    if (typeof window === 'undefined') return undefined
-
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-    window.addEventListener('appinstalled', handleAppInstalled)
-
-    return () => {
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
-      window.removeEventListener('appinstalled', handleAppInstalled)
-    }
+    if (typeof window === 'undefined') return
+    try {
+      if (localStorage.getItem('pop_tutorial_seen') !== '1') {
+        setTutorial({ autoStarted: true })
+      }
+    } catch {}
   }, [])
+
+  const tickRef = useRef(null)
 
   // Timer
   useEffect(() => {
@@ -291,6 +387,21 @@ export default function App() {
     setScreen('play')
   }
 
+  function markTutorialSeen() {
+    try { localStorage.setItem('pop_tutorial_seen', '1') } catch {}
+  }
+
+  function closeTutorial() {
+    markTutorialSeen()
+    setTutorial(null)
+  }
+
+  function tutorialStartGame() {
+    markTutorialSeen()
+    setTutorial(null)
+    startGame()
+  }
+
   function handleSwipe(direction) {
     setState((prev) => {
       const next = applySwipe(prev, direction)
@@ -321,19 +432,6 @@ export default function App() {
     setPicturePlant(null)
   }
 
-  async function promptInstall() {
-    if (!installPrompt) return
-    installPrompt.prompt()
-    const choice = await installPrompt.userChoice.catch(() => null)
-    setInstallPrompt(null)
-    if (choice?.outcome !== 'accepted') {
-      setInstallDismissed(true)
-      try { localStorage.setItem('pop_install_dismissed', '1') } catch {}
-    }
-  }
-
-  const shouldShowInstallPrompt = !isInstalled && !installDismissed && !!installPrompt
-
   return (
     <div className="app">
       {/* HUD */}
@@ -351,7 +449,24 @@ export default function App() {
       </div>
 
       {/* Stage */}
-      <div className="stage">
+      <div className="play-area">
+        <aside className="side-panel side-left" aria-hidden={screen !== 'play'}>
+          <div className="side-card">
+            <div className="side-kicker">How to play</div>
+            <ul className="side-list">
+              <li><Sprout size={16} color="#86efac" /> Swipe <b>right</b> to <b>plant</b> a native species.</li>
+              <li><Trash2 size={16} color="#fca5a5" /> Swipe <b>left</b> to <b>pull</b> an invasive species.</li>
+              <li><RotateCcw size={16} /> Tap the middle button to skip a card.</li>
+              <li><Flame size={16} color="#f5c84b" /> Build a streak for bonus points.</li>
+            </ul>
+          </div>
+          <div className="side-card subtle">
+            <div className="side-kicker">Tap a card</div>
+            <p className="side-copy">Use <b>Show hint</b> for a clue, or <b>Show picture</b> for a closer look at the plant.</p>
+          </div>
+        </aside>
+
+        <div className="stage">
         <div className="card-stack">
           <AnimatePresence>
             {state.combo >= 3 && screen === 'play' && (
@@ -403,6 +518,24 @@ export default function App() {
             )}
           </AnimatePresence>
         </div>
+      </div>
+
+        <aside className="side-panel side-right" aria-hidden={screen !== 'play'}>
+          <div className="side-card">
+            <div className="side-kicker">Round stats</div>
+            <div className="side-stats">
+              <div className="side-stat"><CheckCircle2 size={16} color="#86efac" /><span>Correct</span><b>{state.correct}</b></div>
+              <div className="side-stat"><XCircle size={16} color="#fca5a5" /><span>Wrong</span><b>{state.wrong}</b></div>
+              <div className="side-stat"><Target size={16} color="#f5c84b" /><span>Accuracy</span><b>{accuracy}%</b></div>
+              <div className="side-stat"><Flame size={16} color="#f5c84b" /><span>Streak</span><b>{state.combo}</b></div>
+              <div className="side-stat"><Trophy size={16} color="#f5c84b" /><span>Best</span><b>{Math.max(highScore, state.score)}</b></div>
+            </div>
+          </div>
+          <div className="side-card subtle">
+            <div className="side-kicker">Cards left</div>
+            <div className="side-cards-left">{Math.max(state.deck.length - state.index, 0)}</div>
+          </div>
+        </aside>
       </div>
 
       {/* Action buttons */}
@@ -457,26 +590,6 @@ export default function App() {
               Save the South Bay marsh! Swipe <b>right to plant</b> a native, <b>left to pull</b> an
               invasive. You have <b>{ROUND_SECONDS} seconds</b>.
             </p>
-            {shouldShowInstallPrompt && (
-              <div className="install-banner" role="status" aria-live="polite">
-                <div>
-                  <div className="install-title">Install the app</div>
-                  <div className="install-copy">Add Plant or Pull to your tablet for faster access and a full-screen feel.</div>
-                </div>
-                <div className="install-actions">
-                  <button className="install-btn primary" onClick={promptInstall}>Install</button>
-                  <button
-                    className="install-btn secondary"
-                    onClick={() => {
-                      setInstallDismissed(true)
-                      try { localStorage.setItem('pop_install_dismissed', '1') } catch {}
-                    }}
-                  >
-                    Not now
-                  </button>
-                </div>
-              </div>
-            )}
             <div className="legend">
               <span className="legend-item"><Sprout size={14} color="#86efac" /> Right = Native</span>
               <span className="legend-item"><Skull size={14} color="#fca5a5" /> Left = Invasive</span>
@@ -484,6 +597,13 @@ export default function App() {
             </div>
             <button className="cta" onClick={startGame}>
               <Play size={18} /> Start
+            </button>
+            <button
+              type="button"
+              className="cta secondary"
+              onClick={() => setTutorial({ autoStarted: false })}
+            >
+              How to play
             </button>
             <a className="learn-more" href={SFBBO_URL} target="_blank" rel="noopener noreferrer">
               Learn about SFBBO's marsh restoration work <ExternalLink size={14} />
@@ -531,6 +651,16 @@ export default function App() {
       <AnimatePresence>
         {picturePlant && (
           <PicturePreview plant={picturePlant} onClose={closePicture} />
+        )}
+      </AnimatePresence>
+
+      <AnimatePresence>
+        {tutorial && (
+          <Tutorial
+            autoStarted={tutorial.autoStarted}
+            onClose={closeTutorial}
+            onStart={tutorialStartGame}
+          />
         )}
       </AnimatePresence>
     </div>

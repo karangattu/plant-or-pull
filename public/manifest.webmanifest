@@ -1,27 +1,38 @@
 {
+  "id": "/plant-or-pull/",
   "name": "Plant or Pull",
   "short_name": "Plant or Pull",
   "description": "A mobile-first SFBBO swipe game for identifying native and invasive tidal marsh plants.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
+  "display_override": ["standalone", "minimal-ui", "browser"],
+  "orientation": "any",
+  "lang": "en",
+  "categories": ["education", "games"],
   "background_color": "#0b3d2e",
   "theme_color": "#0b3d2e",
   "icons": [
     {
-      "src": "sfbbo_logo.png",
+      "src": "icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "icon-192.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "sfbbo_logo.png",
+      "src": "icon-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "sfbbo_logo.png",
+      "src": "icon-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "maskable"
