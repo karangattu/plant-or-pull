@@ -17,6 +17,8 @@ import {
   Target,
   CheckCircle2,
   XCircle,
+  Maximize2,
+  Minimize2,
 } from 'lucide-react'
 import splashSrc from '../assets/GAME_SPLASH_SCREEN.png'
 import { buildDeck, resolveImage } from './plants'
@@ -277,6 +279,24 @@ export default function App() {
     return Number(localStorage.getItem('pop_high') || 0)
   })
 
+  const [isFullscreen, setIsFullscreen] = useState(false)
+
+  useEffect(() => {
+    function onFullscreenChange() {
+      setIsFullscreen(!!document.fullscreenElement)
+    }
+    document.addEventListener('fullscreenchange', onFullscreenChange)
+    return () => document.removeEventListener('fullscreenchange', onFullscreenChange)
+  }, [])
+
+  function toggleFullscreen() {
+    if (!document.fullscreenElement) {
+      document.documentElement.requestFullscreen().catch(() => {})
+    } else {
+      document.exitFullscreen().catch(() => {})
+    }
+  }
+
   // Auto-show the tutorial the first time someone opens the game.
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -369,6 +389,15 @@ export default function App() {
             <Timer size={14} /> {state.timeLeft}s
           </span>
           <span className="pill score"><Trophy size={14} /> {state.score}</span>
+          <button
+            type="button"
+            className="fullscreen-btn"
+            onClick={toggleFullscreen}
+            aria-label={isFullscreen ? 'Exit full screen' : 'Enter full screen'}
+            title={isFullscreen ? 'Exit full screen' : 'Full screen'}
+          >
+            {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+          </button>
         </div>
       </div>
       <div className="timebar">

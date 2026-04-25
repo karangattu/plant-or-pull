@@ -135,6 +135,26 @@ body {
 .pill.warn { background: rgba(220,38,38,0.25); border-color: rgba(220,38,38,0.55); }
 .pill.score { background: rgba(245,200,75,0.18); border-color: rgba(245,200,75,0.5); }
 
+/* ---------- Fullscreen button ---------- */
+.fullscreen-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.18);
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  cursor: pointer;
+  padding: 0;
+  backdrop-filter: blur(8px);
+  transition: background 0.15s ease, transform 0.1s ease;
+  flex-shrink: 0;
+}
+.fullscreen-btn:hover { background: rgba(255,255,255,0.22); }
+.fullscreen-btn:active { transform: scale(0.92); }
+
 /* ---------- Timer bar ---------- */
 .timebar {
   height: 8px;
