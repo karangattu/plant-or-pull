@@ -536,6 +536,15 @@ export default function App() {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
           >
+            <button
+              type="button"
+              className="fullscreen-btn overlay-fullscreen-btn"
+              onClick={toggleFullscreen}
+              aria-label={isFullscreen ? 'Exit full screen' : 'Enter full screen'}
+              title={isFullscreen ? 'Exit full screen' : 'Full screen'}
+            >
+              {isFullscreen ? <Minimize2 size={16} /> : <Maximize2 size={16} />}
+            </button>
             <a href={SFBBO_URL} target="_blank" rel="noopener noreferrer" className="splash-logo">
               <img src={LOGO_URL} alt="SFBBO" />
             </a>
