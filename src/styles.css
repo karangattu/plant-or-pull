@@ -155,6 +155,13 @@ body {
 .fullscreen-btn:hover { background: rgba(255,255,255,0.22); }
 .fullscreen-btn:active { transform: scale(0.92); }
 
+/* Fullscreen button inside overlays */
+.overlay-fullscreen-btn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+}
+
 /* ---------- Timer bar ---------- */
 .timebar {
   height: 8px;
