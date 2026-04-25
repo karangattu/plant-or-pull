@@ -55,61 +55,8 @@ function PlantArt({ plant }) {
   return <Leaf size={64} color="#86efac" aria-hidden />
 }
 
-function PicturePreview({ plant, onClose }) {
-  const src = resolveImage(plant.image)
-
-  useEffect(() => {
-    function handleKeyDown(event) {
-      if (event.key === 'Escape') onClose()
-    }
-
-    window.addEventListener('keydown', handleKeyDown)
-    return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [onClose])
-
-  return (
-    <motion.div
-      className="picture-modal"
-      role="dialog"
-      aria-modal="true"
-      aria-label={`${plant.name} picture preview`}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      onClick={onClose}
-    >
-      <motion.div
-        className="picture-modal-card"
-        initial={{ scale: 0.96, y: 14 }}
-        animate={{ scale: 1, y: 0 }}
-        exit={{ scale: 0.96, y: 14 }}
-        onClick={(event) => event.stopPropagation()}
-      >
-        <div className="picture-modal-header">
-          <div>
-            <div className="picture-modal-kicker">Closer look</div>
-            <div className="picture-modal-title">{plant.name}</div>
-          </div>
-          <button type="button" className="picture-modal-close" onClick={onClose} aria-label="Close picture">
-            ×
-          </button>
-        </div>
-        <div className="picture-modal-body">
-          {src ? (
-            <img className="picture-modal-img" src={src} alt={plant.name} />
-          ) : (
-            <div className="picture-modal-fallback">
-              <Leaf size={72} color="#86efac" aria-hidden />
-            </div>
-          )}
-        </div>
-      </motion.div>
-    </motion.div>
-  )
-}
-
 // ---------- Card ----------
-function Card({ plant, onSwipe, isTop, onShowPicture }) {
+function Card({ plant, onSwipe, isTop }) {
   const x = useMotionValue(0)
   const rotate = useTransform(x, [-220, 0, 220], [-18, 0, 18])
   const leftOpacity = useTransform(x, [-160, -40, 0], [1, 0.2, 0])
@@ -170,17 +117,6 @@ function Card({ plant, onSwipe, isTop, onShowPicture }) {
         >
           {showHint ? 'Hide hint' : 'Show hint'}
         </button>
-        <button
-          type="button"
-          className="hint-toggle picture-toggle"
-          onClick={(event) => {
-            event.stopPropagation()
-            onShowPicture?.(plant)
-          }}
-          onPointerDown={(event) => event.stopPropagation()}
-        >
-          Show picture
-        </button>
         {showHint && (
           <p
             id={`hint-${plant.name.replace(/[^a-z0-9]+/gi, '-').toLowerCase()}`}
@@ -233,7 +169,7 @@ const TUTORIAL_STEPS = [
     icon: Leaf,
     iconColor: '#0f766e',
     title: 'Need a clue?',
-    body: 'Tap "Show hint" on any card for a quick fact, or "Show picture" to see a closer look at the plant.',
+    body: 'Tap "Show hint" on any card for a quick fact about the plant.',
   },
   {
     icon: Flame,
@@ -335,7 +271,6 @@ export default function App() {
   const [screen, setScreen] = useState('home') // home | play | over
   const [state, setState] = useState(() => initialState(buildDeck(8)))
   const [fx, setFx] = useState(null)
-  const [picturePlant, setPicturePlant] = useState(null)
   const [tutorial, setTutorial] = useState(null) // null | { autoStarted: boolean }
   const [highScore, setHighScore] = useState(() => {
     if (typeof window === 'undefined') return 0
@@ -424,14 +359,6 @@ export default function App() {
   const next = state.deck[state.index + 1]
   const accuracy = useMemo(() => accuracyOf(state), [state])
 
-  function showPicture(plant) {
-    setPicturePlant(plant)
-  }
-
-  function closePicture() {
-    setPicturePlant(null)
-  }
-
   return (
     <div className="app">
       {/* HUD */}
@@ -462,7 +389,7 @@ export default function App() {
           </div>
           <div className="side-card subtle">
             <div className="side-kicker">Tap a card</div>
-            <p className="side-copy">Use <b>Show hint</b> for a clue, or <b>Show picture</b> for a closer look at the plant.</p>
+            <p className="side-copy">Tap <b>Show hint</b> for a clue about the plant.</p>
           </div>
         </aside>
 
@@ -503,7 +430,6 @@ export default function App() {
               plant={next}
               isTop={false}
               onSwipe={() => {}}
-              onShowPicture={showPicture}
             />
           )}
           <AnimatePresence>
@@ -513,7 +439,6 @@ export default function App() {
                 plant={current}
                 isTop
                 onSwipe={handleSwipe}
-                onShowPicture={showPicture}
               />
             )}
           </AnimatePresence>
@@ -645,12 +570,6 @@ export default function App() {
               Support SFBBO's work <ExternalLink size={14} />
             </a>
           </motion.div>
-        )}
-      </AnimatePresence>
-
-      <AnimatePresence>
-        {picturePlant && (
-          <PicturePreview plant={picturePlant} onClose={closePicture} />
         )}
       </AnimatePresence>
 
