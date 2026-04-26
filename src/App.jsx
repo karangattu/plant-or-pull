@@ -39,6 +39,36 @@ function vibrate(pattern) {
   }
 }
 
+// ---------- Wrong plant review item ----------
+function WrongPlantItem({ plant }) {
+  const src = resolveImage(plant.image)
+  const [failed, setFailed] = useState(false)
+  const isNative = plant.type === 'native'
+  return (
+    <div className="wrong-plant-item">
+      {src && !failed ? (
+        <img
+          src={src}
+          alt={plant.name}
+          className="wrong-plant-img"
+          onError={() => setFailed(true)}
+        />
+      ) : (
+        <div className="wrong-plant-fallback">
+          <Leaf size={20} color="#86efac" />
+        </div>
+      )}
+      <div className="wrong-plant-info">
+        <div className="wrong-plant-name">{plant.name}</div>
+        <span className={`wrong-plant-badge ${plant.type}`}>
+          {isNative ? <Sprout size={11} /> : <Trash2 size={11} />}
+          {isNative ? 'Should plant' : 'Should pull'}
+        </span>
+      </div>
+    </div>
+  )
+}
+
 // ---------- Plant artwork: image with generic fallback ----------
 function PlantArt({ plant }) {
   const src = resolveImage(plant.image)
@@ -596,6 +626,16 @@ export default function App() {
               <div className="score-row"><span>Best streak</span><b><Flame size={14} style={{ verticalAlign: -2 }} /> {state.bestCombo}</b></div>
               <div className="score-row"><span>High score</span><b style={{ color: '#f5c84b' }}>{Math.max(highScore, state.score)}</b></div>
             </div>
+            {state.wrongPlants.length > 0 && (
+              <div className="wrong-plants">
+                <div className="wrong-plants-title">
+                  <XCircle size={13} style={{ verticalAlign: -1 }} /> Incorrect answers
+                </div>
+                {state.wrongPlants.map((plant, i) => (
+                  <WrongPlantItem key={`${plant.name}-${i}`} plant={plant} />
+                ))}
+              </div>
+            )}
             <div style={{ display: 'flex', gap: 10 }}>
               <button className="cta" onClick={startGame}>
                 <RotateCcw size={18} /> Play again

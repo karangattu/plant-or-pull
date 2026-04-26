@@ -388,6 +388,71 @@ body {
 }
 .muted { opacity: 0.75; font-size: 14px; }
 
+/* ---------- Wrong plants review ---------- */
+.overlay { overflow-y: auto; }
+.wrong-plants {
+  width: 100%;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.wrong-plants-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  opacity: 0.6;
+  text-align: left;
+  margin-bottom: 2px;
+}
+.wrong-plant-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  border-radius: 14px;
+  padding: 10px 14px;
+}
+.wrong-plant-img {
+  width: 44px;
+  height: 44px;
+  object-fit: cover;
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.wrong-plant-fallback {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255,255,255,0.06);
+  border-radius: 8px;
+  flex-shrink: 0;
+}
+.wrong-plant-info {
+  flex: 1;
+  text-align: left;
+}
+.wrong-plant-name {
+  font-weight: 700;
+  font-size: 14px;
+}
+.wrong-plant-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  margin-top: 4px;
+}
+.wrong-plant-badge.native { background: rgba(134,239,172,0.18); color: #86efac; }
+.wrong-plant-badge.invasive { background: rgba(252,165,165,0.18); color: #fca5a5; }
+
 /* ---------- Floating feedback (+1 / -1) ---------- */
 .float-fx {
   position: absolute;

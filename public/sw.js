@@ -1,5 +1,5 @@
 // Bump this whenever the deployed bundle changes shape so old clients refresh.
-const CACHE_NAME = 'plant-or-pull-v9'
+const CACHE_NAME = 'plant-or-pull-v10'
 
 // Files that make up the app shell. These are precached on install so the
 // game still loads (and can run) when the device is offline. Hashed JS/CSS
