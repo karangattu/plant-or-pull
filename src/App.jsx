@@ -30,6 +30,7 @@ import {
 } from './game'
 
 const SWIPE_THRESHOLD = 110 // px
+const START_COUNTDOWN_SECONDS = 3
 const SFBBO_URL = 'https://www.sfbbo.org/'
 const LOGO_URL = resolveImage('/sfbbo_logo.png')
 
@@ -300,10 +301,11 @@ function Tutorial({ onClose, onStart, autoStarted }) {
 
 // ---------- App ----------
 export default function App() {
-  const [screen, setScreen] = useState('home') // home | play | over
+  const [screen, setScreen] = useState('home') // home | countdown | play | over
   const [state, setState] = useState(() => initialState(buildDeck(8)))
   const [fx, setFx] = useState(null)
   const [tutorial, setTutorial] = useState(null) // null | { autoStarted: boolean }
+  const [countdown, setCountdown] = useState(null)
   const [highScore, setHighScore] = useState(() => {
     if (typeof window === 'undefined') return 0
     return Number(localStorage.getItem('pop_high') || 0)
@@ -354,6 +356,21 @@ export default function App() {
     return () => clearInterval(tickRef.current)
   }, [screen])
 
+  useEffect(() => {
+    if (screen !== 'countdown' || countdown === null) return
+    if (countdown === 0) {
+      setCountdown(null)
+      setScreen('play')
+      return
+    }
+
+    const timeout = setTimeout(() => {
+      setCountdown((value) => Math.max(0, (value ?? 0) - 1))
+    }, 1000)
+
+    return () => clearTimeout(timeout)
+  }, [countdown, screen])
+
   // End condition
   useEffect(() => {
     if (screen === 'play' && state.timeLeft === 0) {
@@ -369,7 +386,8 @@ export default function App() {
 
   function startGame() {
     setState(initialState(buildDeck(8)))
-    setScreen('play')
+    setCountdown(START_COUNTDOWN_SECONDS)
+    setScreen('countdown')
   }
 
   function markTutorialSeen() {
@@ -558,6 +576,21 @@ export default function App() {
       )}
 
       {/* Home overlay */}
+      <AnimatePresence>
+        {screen === 'countdown' && (
+          <motion.div
+            className="overlay countdown-overlay"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className="countdown-kicker">Round starts in</div>
+            <h1 className="title countdown-title">Get ready</h1>
+            <div className="countdown-value" aria-live="assertive">{countdown}</div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>
         {screen === 'home' && (
           <motion.div
