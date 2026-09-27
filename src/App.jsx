@@ -137,6 +137,7 @@ function Card({ plant, onSwipe, isTop }) {
           {plant.name}
           <Leaf size={18} color="#16a34a" />
         </h2>
+        {plant.scientificName && <p className="card-scientific-name">{plant.scientificName}</p>}
         <button
           type="button"
           className="hint-toggle"

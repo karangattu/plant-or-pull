@@ -7,6 +7,7 @@
 //
 //   {
 //     name:  'Display name shown on the card',
+//     scientificName: 'Optional species name shown under the card title',
 //     type:  'native' | 'invasive',  // determines the correct swipe direction
 //     emoji: '🌱',                    // fallback icon when no image is set
 //     image: assetImg('FILE.png'),   // OPTIONAL — drop the file into assets/
@@ -38,6 +39,7 @@ export const PLANTS = [
   { name: 'Western Goldenrod',    type: 'native',   image: assetImg('WESTERN_GOLDENROD.png'),    note: 'A perennial herb, western goldenrod grows upright each season and blooms in flat-topped clusters of small yellow flower heads.' },
   { name: 'Coyote Brush',         type: 'native',   image: assetImg('COYOTE_BRUSH.png'),         note: 'A perennial evergreen shrub, coyote brush branches densely and releases wind-carried seeds from fluffy white heads on female plants.' },
   { name: 'Pacific Cordgrass',    type: 'native',   image: assetImg('PACIFIC_CORDGRASS.png'),    note: 'A perennial grass, Pacific cordgrass spreads by rhizomes and raises tall stems that withstand regular tidal flooding.' },
+  { name: 'Arroyo Lupine',        scientificName: 'Lupinus succulentus', type: 'native', image: assetImg('ARROYO_LUPINE.png'), note: 'An annual wildflower with fleshy stems, arroyo lupine grows in heavy soils and blooms with upright blue-violet flower clusters from winter into spring.' },
 
   // ----- INVASIVES (swipe LEFT to PULL) -----
   { name: 'Perennial Pepperweed', type: 'invasive', image: assetImg('PERENNIAL_PEPPERWEED.png'), note: 'A perennial herb, perennial pepperweed regrows from deep creeping roots; even small root pieces can sprout new shoots.' },

@@ -2,6 +2,8 @@
 
 Reviewed 27 September 2026 · 26 plant assets mapped from `src/plants.js` · baseline commit `b556ada`
 
+Arroyo Lupine was added after this baseline review; see its [species and illustration notes](arroyo-lupine.md). The live deck now has 27 plants.
+
 **Update, 27 September 2026:** The eight illustrations rated “Priority rework” below have been regenerated and replaced in `assets/`. The game now displays complete images with `object-fit: contain`. This report records the original findings and the briefs used for those replacements; its “Observed” descriptions refer to the original artwork. The other 18 ratings remain current. The generated replacements have been visually checked against the cited descriptions, but their identification value has not been measured with users or confirmed by a botanist.
 
 **The original set was not reliable for learning plant identification from illustrations alone.** My baseline editorial assessment was **8 priority reworks, 14 targeted refinements, and 4 broadly usable illustrations**. These ratings assess the original artwork, not measured recognition rates; no user recognition study was performed.

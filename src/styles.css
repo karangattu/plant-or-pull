@@ -238,6 +238,12 @@ body {
   justify-content: space-between;
   gap: 10px;
 }
+.card-scientific-name {
+  margin: -8px 0 0;
+  color: var(--muted);
+  font-size: 13px;
+  font-style: italic;
+}
 .hint-toggle {
   display: inline-flex;
   width: fit-content;
