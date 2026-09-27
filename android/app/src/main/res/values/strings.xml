@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Plant or Pull</string>
+    <string name="title_activity_main">Plant or Pull</string>
+    <string name="package_name">org.sfbbo.plantorpull</string>
+    <string name="custom_url_scheme">org.sfbbo.plantorpull</string>
+</resources>
