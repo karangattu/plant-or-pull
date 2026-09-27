@@ -35,6 +35,9 @@ export const PLANTS = [
   { name: 'Common Yarrow',        type: 'native',   image: assetImg('COMMON_YARROW.png'),        note: 'Common Yarrow is a magnet for hoverflies, lacewings, and parasitic wasps. These insects are the primary predators of aphids and other garden pests.' },
   { name: 'Salty Susan',          type: 'native',   image: assetImg('SALTY_SUSAN.png'),          note: 'Salty Susan grows via creeping underground stems (rhizomes). This allows it to form dense, succulent mats that act like living rebar, reinforcing the muddy banks of tidal sloughs' },
   { name: 'Tule Reed',            type: 'native',   image: assetImg('TULE_REED.png'),            note: 'Tule Reed is the primary nesting site for Marsh Wrens. The sturdy, air-filled stems provide a stable structure for nests that can rise and fall slightly with water levels.' },
+  { name: 'Western Goldenrod',    type: 'native',   image: assetImg('WESTERN_GOLDENROD.png'),    note: 'Western Goldenrod is native to California wetlands. Its flat-topped sprays of tiny yellow flower heads brighten marsh edges and streambanks.' },
+  { name: 'Coyote Brush',         type: 'native',   image: assetImg('COYOTE_BRUSH.png'),         note: 'Coyote Brush is a native coastal shrub whose dense evergreen branches provide cover for wildlife along the upland edge of a marsh.' },
+  { name: 'Pacific Cordgrass',    type: 'native',   image: assetImg('PACIFIC_CORDGRASS.png'),    note: 'Pacific Cordgrass grows in the low salt marsh. Its tall stems provide protective cover for the endangered California Ridgway\'s rail.' },
 
   // ----- INVASIVES (swipe LEFT to PULL) -----
   { name: 'Perennial Pepperweed', type: 'invasive', image: assetImg('PERENNIAL_PEPPERWEED.png'), note: "A piece of root as small as half an inch can sprout into a brand-new plant." },
@@ -47,6 +50,9 @@ export const PLANTS = [
   { name: 'Poison Hemlock',       type: 'invasive', image: assetImg('POISON_HEMLOCK.png'),       note: 'Hemlock stalks are hollow and brittle. They don\'t provide the long-term nesting stability that marsh birds require.' },
   { name: 'Stinkwort',            type: 'invasive', image: assetImg('STINKWORT.png'),            note: 'Most native insects and animals won\'t touch it. This gives stinkwort a massive advantage, as it faces zero grazing pressure while it smothers out the native plants that are being eaten.' },
   { name: 'Wild Radish',          type: 'invasive', image: assetImg('WILD_RADISH.png'),          note: 'Wild radish is one of the first plants to germinate after the winter rains. Because it grows so rapidly, it creates a dense "canopy" of large, bristly leaves that shade out the ground.' },
+  { name: 'Brass-Buttons',        type: 'invasive', image: assetImg('BRASS_BUTTONS.png'),        note: 'This South African marsh invader can root where its creeping stems touch the ground. Its tiny seeds can also move with water and birds.' },
+  { name: 'Australian Saltbush',  type: 'invasive', image: assetImg('AUSTRALIAN_SALTBUSH.png'),  note: 'Introduced from Australia, this spreading saltbush can form dense stands on the higher ground of salt marshes and displace native plants.' },
+  { name: 'Hottentot Fig',        type: 'invasive', image: assetImg('HOTTENTOT_FIG.png'),        note: 'This South African succulent forms dense coastal mats that crowd out native plants. Even small stem fragments can regrow.' },
 ]
 
 // Fisher-Yates shuffle returning a new array.
