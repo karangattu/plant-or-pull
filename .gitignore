@@ -5,3 +5,4 @@ dist
 .vite
 android/keystore.properties
 android/keystores/
+*.apk
